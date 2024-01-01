@@ -1,0 +1,45 @@
+{
+  "name": "haruhana-server",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "compile": "tsc -p .",
+    "typecheck": "tsc -p . --noEmit",
+    "build": "yarn clean && yarn compile",
+    "start": "npm run build && node ./dist/main.js",
+    "test": "jest",
+    "dev": "npm run typecheck -- --watch & tsx watch ./src/main.ts",
+    "clean": "rm -rf dist ./dist"
+  },
+  "bin": {
+    "create-typescript-boilerplate": "bin/cli.js"
+  },
+  "engines": {
+    "node": ">=18.17.0",
+    "npm": "please-use-yarn"
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "18.4.3",
+    "@types/jest": "29.5.3",
+    "@types/node": "20.4.5",
+    "@typescript-eslint/eslint-plugin": "6.2.0",
+    "@typescript-eslint/parser": "6.2.0",
+    "commitlint": "18.4.3",
+    "eslint": "8.46.0",
+    "eslint-config-prettier": "8.9.0",
+    "eslint-plugin-prettier": "5.0.0",
+    "jest": "29.6.2",
+    "lefthook": "1.5.5",
+    "prettier": "3.0.0",
+    "rimraf": "5.0.1",
+    "ts-jest": "29.1.1",
+    "tsx": "4.7.0",
+    "typescript": "5.1.6"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  }
+}
