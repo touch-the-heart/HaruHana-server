@@ -1,0 +1,5 @@
+{
+    "out":"./migration",
+    "schema": "./src/provider/db/schema.ts",
+    "breakpoints":false
+}
