@@ -11,7 +11,7 @@ export const createToken = (input: UserTokenInput): string => {
   const token = jwt.sign(
     {
       id: user.id,
-      scope: role.permissions,
+      scopes: role.permissions,
     },
     env.TOKEN_SECRET,
   );
