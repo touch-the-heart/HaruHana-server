@@ -1,6 +1,6 @@
 import { env } from './config/env';
 import { db } from './provider/db';
-import { buildServer } from './server';
+import { buildServer } from './core/server';
 import { logger } from './util/logger';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 

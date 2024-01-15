@@ -11,7 +11,7 @@
     "test": "jest",
     "dev": "yarn typecheck & tsx watch ./src/main.ts",
     "clean": "rm -rf dist ./dist",
-    "migrate":"drizzle-kit generate:pg"
+    "migrate": "drizzle-kit generate:pg"
   },
   "bin": {
     "create-typescript-boilerplate": "bin/cli.js"
@@ -48,7 +48,10 @@
     ]
   },
   "dependencies": {
+    "@fastify/cors": "^8.5.0",
+    "@fastify/oauth2": "^7.8.0",
     "argon2": "^0.31.2",
+    "axios": "^1.6.5",
     "drizzle-orm": "^0.29.3",
     "fastify": "^4.25.2",
     "fastify-guard": "^2.0.0",

@@ -3,8 +3,8 @@ import zodToJsonSchema from 'zod-to-json-schema';
 
 export const createUserBodySchema = z.object({
   email: z.string().email(),
+  vendor: z.string(),
   name: z.string(),
-  applicationId: z.string().uuid(),
 });
 
 export type CreateUserSchema = z.infer<typeof createUserBodySchema>;

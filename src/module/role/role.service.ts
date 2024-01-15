@@ -7,11 +7,11 @@ export async function createRole(data: InferInsertModel<typeof roles>) {
   return result[0];
 }
 
-export async function getRoleByName({ name, applicationId }: { name: string; applicationId: string }) {
+export async function getRoleByName({ name }: { name: string }) {
   const result = await db
     .select()
     .from(roles)
-    .where(and(eq(roles.name, name), eq(roles.applicationId, applicationId)))
+    .where(and(eq(roles.name, name)))
     .limit(1);
   return result[0];
 }

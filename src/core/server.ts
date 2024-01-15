@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import fastify from 'fastify';
-import { logger } from './util/logger';
-import { applicationRoutes } from './module/application/application.route';
-import { userRoutes } from './module/user/user.route';
+import { logger } from '../util/logger';
+import { userRoutes } from '../module/user/user.route';
 import guard from 'fastify-guard';
 import jwt from 'jsonwebtoken';
+import { registerCorsProvider } from './plugins/cors';
+import { registerGoogleOAuth2Provider } from './plugins/oauth2';
+import { authRoute } from '../module/auth/auth.route';
 
 type User = {
   id: string;
@@ -16,15 +18,17 @@ declare module 'fastify' {
     user: User;
   }
 }
+export const App = fastify({
+  logger,
+});
 
 export async function buildServer() {
-  const app = fastify({
-    logger,
-  });
+  registerCorsProvider(App);
+  registerGoogleOAuth2Provider(App);
 
   //register hook
-  app.decorateRequest('user', null);
-  app.addHook('onRequest', async (req, _) => {
+  App.decorateRequest('user', null);
+  App.addHook('onRequest', async (req, _) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
       return;
@@ -36,7 +40,7 @@ export async function buildServer() {
     } catch (e) {}
   });
   // register plugins
-  app.register(guard, {
+  App.register(guard, {
     requestProperty: 'user',
     scopeProperty: 'scopes',
     errorHandler: (result, req, res) => {
@@ -44,8 +48,11 @@ export async function buildServer() {
     },
   });
   // register routes
-  app.register(applicationRoutes, { prefix: '/api/application' });
-  app.register(userRoutes, { prefix: '/api/user' });
+  App.get('/', async (_req, _res) => {
+    return { hello: 'world' };
+  });
+  App.register(userRoutes, { prefix: '/api/user' });
+  App.register(authRoute, { prefix: '/auth' });
 
-  return app;
+  return App;
 }

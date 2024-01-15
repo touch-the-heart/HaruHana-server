@@ -1,19 +1,11 @@
-import { pgTable, uuid, varchar, timestamp, text, primaryKey } from 'drizzle-orm/pg-core';
-
-export const application = pgTable('application', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  name: varchar('name', { length: 256 }).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
+import { pgTable, uuid, varchar, timestamp, text, primaryKey, date, smallint } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom().notNull(),
   email: varchar('email', { length: 256 }).notNull(),
-  name: varchar('email', { length: 256 }).notNull(),
-  applicationId: uuid('applicationId')
-    .references(() => application.id)
-    .notNull(),
+  vendor: varchar('vendor', { length: 256 }).notNull(),
+  name: varchar('name', { length: 256 }).notNull().default(''),
+  color: varchar('color', { length: 256 }).notNull().default(''),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -21,10 +13,7 @@ export const users = pgTable('users', {
 export const roles = pgTable('roles', {
   id: uuid('id').primaryKey().defaultRandom().notNull(),
   name: varchar('name', { length: 256 }).notNull(),
-  permissions: text('permissions').array().$type<Array<string>>(),
-  applicationId: uuid('applicationId')
-    .references(() => application.id)
-    .notNull(),
+  permissions: text('permissions').array().$type<Array<string>>().notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
@@ -32,19 +21,70 @@ export const roles = pgTable('roles', {
 export const userRole = pgTable(
   'userRole',
   {
-    applicationId: uuid('applicationId')
-      .references(() => application.id)
-      .notNull(),
     roleId: uuid('roleId')
       .references(() => roles.id)
       .notNull(),
     userId: uuid('userId')
       .references(() => users.id)
       .notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
   },
   (userRole) => {
     return {
-      cpk: primaryKey({ columns: [userRole.applicationId, userRole.roleId, userRole.userId] }),
+      cpk: primaryKey({ columns: [userRole.roleId, userRole.userId] }),
     };
   },
 );
+
+export const couple = pgTable('couple', {
+  id: uuid('id').primaryKey().defaultRandom().notNull(),
+  code: varchar('code', { length: 6 }).notNull(),
+  anniversary: date('anniversary').notNull(),
+  userId1: uuid('userId1')
+    .references(() => users.id)
+    .notNull(),
+  userId2: uuid('userId2')
+    .references(() => users.id)
+    .notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const couplePage = pgTable('couplePage', {
+  id: uuid('id').primaryKey().defaultRandom().notNull(),
+  date: date('date').notNull(),
+  title: varchar('title', { length: 256 }).notNull(),
+  layout: smallint('layout').notNull().default(1),
+  coupleId: uuid('coupleId')
+    .references(() => couple.id)
+    .notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const coupleImage = pgTable('coupleImage', {
+  id: uuid('id').primaryKey().defaultRandom().notNull(),
+  couplePageId: uuid('couplePageId')
+    .references(() => couplePage.id)
+    .notNull(),
+  src: varchar('src').notNull().default(''),
+  userId: uuid('userId')
+    .references(() => users.id)
+    .notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const coupleReview = pgTable('coupleReview', {
+  id: uuid('id').primaryKey().defaultRandom().notNull(),
+  review: varchar('review').notNull(),
+  userId: uuid('userId')
+    .references(() => users.id)
+    .notNull(),
+  couplePageId: uuid('couplePageId')
+    .references(() => couplePage.id)
+    .notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});

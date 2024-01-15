@@ -1,29 +1,15 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { CreateUserSchema } from './user.schema';
-import { SYSTEM_ROLES } from '../../config/permissions';
 import { getRoleByName } from '../role/role.service';
-import { assignRoleToUser, createUser, getUserByApplication } from './user.service';
+import { assignRoleToUser, createUser } from './user.service';
+import { SYSTEM_ROLES } from '../../config/permissions';
 
 export const createUserHandler = async (req: FastifyRequest<{ Body: CreateUserSchema }>, res: FastifyReply) => {
   const data = req.body;
   const roleName = SYSTEM_ROLES.APPLICATION_USER;
 
-  if (roleName === SYSTEM_ROLES.SUPER_ADMIN) {
-    const appUsers = await getUserByApplication(data.applicationId);
-    if (appUsers.length > 0) {
-      return res.code(400).send({
-        message: 'Application already has super admin user',
-        extensions: {
-          code: 'APPLICATION_ALRADY_SUPER_USER',
-          applicationId: data.applicationId,
-        },
-      });
-    }
-  }
-
   const role = await getRoleByName({
     name: roleName,
-    applicationId: data.applicationId,
   });
 
   if (!role) {
@@ -37,7 +23,6 @@ export const createUserHandler = async (req: FastifyRequest<{ Body: CreateUserSc
     await assignRoleToUser({
       userId: user.id,
       roleId: role.id,
-      applicationId: data.applicationId,
     });
     return user;
   } catch (e) {}
