@@ -10,7 +10,7 @@ export const registerOnRequestHook = (app: typeof App) => {
       return;
     }
     try {
-      const token = authHeader.replace('Bearer', '');
+      const token = authHeader.replace('Bearer ', '');
       const decode = jwt.decode(token) as User;
       req.user = decode;
     } catch (e) {

@@ -6,7 +6,7 @@ export const registerGuard = (app: typeof App) => {
     requestProperty: 'user',
     scopeProperty: 'scopes',
     errorHandler: (result, req, res) => {
-      return res.send('you can not do that');
+      return res.code(403).send({ error: 'authorization error' });
     },
   });
 };

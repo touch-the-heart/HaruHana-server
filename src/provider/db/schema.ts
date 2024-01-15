@@ -39,14 +39,12 @@ export const userRole = pgTable(
 
 export const couple = pgTable('couple', {
   id: uuid('id').primaryKey().defaultRandom().notNull(),
-  code: varchar('code', { length: 6 }).notNull(),
+  code: varchar('code', { length: 8 }).unique().notNull(),
   anniversary: date('anniversary').notNull(),
   userId1: uuid('userId1')
     .references(() => users.id)
     .notNull(),
-  userId2: uuid('userId2')
-    .references(() => users.id)
-    .notNull(),
+  userId2: uuid('userId2').references(() => users.id),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
