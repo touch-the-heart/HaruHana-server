@@ -17,9 +17,11 @@ async function main() {
   const app = await buildServer();
   app.listen({ port: env.PORT, host: env.HOST });
 
-  await migrate(db, {
-    migrationsFolder: './migration',
-  });
+  if (env.NODE_ENV !== 'production') {
+    await migrate(db, {
+      migrationsFolder: './migration',
+    });
+  }
 
   logger.info('server is running');
   logger.debug(env);
