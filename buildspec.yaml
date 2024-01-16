@@ -1,0 +1,25 @@
+version: 0.2
+ 
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Install yarn
+      - "npm install yarn -g"
+  pre_build:
+    commands:
+      - echo Delete .env
+      - rm -rf .env
+  build:
+    commands:
+      - echo Start build
+      - yarn install && yarn build
+  post_build:
+    commands:
+      - echo Build completed
+artifacts:
+  files:
+    - 'node_modules/**/*'
+    - 'dist/**/*'
+    - 'package.json'
