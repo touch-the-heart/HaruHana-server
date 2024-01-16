@@ -7,7 +7,7 @@
     "compile": "tsc -p .",
     "typecheck": "tsc -p . --noEmit",
     "build": "yarn clean && yarn compile",
-    "start": "npm run build && node ./dist/main.js",
+    "start": "node dist/main.js",
     "test": "jest",
     "dev": "yarn typecheck & tsx watch ./src/main.ts",
     "clean": "rm -rf dist ./dist",
