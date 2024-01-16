@@ -6,6 +6,7 @@ import { getRoleByName } from '../role/role.service';
 import { SYSTEM_ROLES } from '../../config/permissions';
 import { createToken } from './auth.service';
 import { getCouple } from '../couple/couple.service';
+import { faker } from '@faker-js/faker';
 
 export async function googleHandler(this: FastifyInstance, req: FastifyRequest, res: FastifyReply) {
   const OAuthToken = await this.GoogleOAuth2.getAccessTokenFromAuthorizationCodeFlow(req);
@@ -26,6 +27,8 @@ export async function googleHandler(this: FastifyInstance, req: FastifyRequest, 
   const newUser = await createUser({
     email: userInfo.email,
     vendor: 'google',
+    name: userInfo.name,
+    color: faker.color.rgb(),
   });
   await assignRoleToUser({
     roleId: role.id,
@@ -39,6 +42,6 @@ const getUserInfoFromGoogle = async (token: string) => {
   const result = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
     headers: { Authorization: `Bearer ${token}` },
   });
-  const { email } = result.data;
-  return { email };
+  const { email, name } = result.data;
+  return { email, name: name ?? '이름을 정해주세요!' };
 };

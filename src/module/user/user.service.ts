@@ -49,11 +49,12 @@ export const updateUserInfoById = async ({ id, name, color }: UpdateUserInfo) =>
 
 export const saveUser = async (body: UpdateUserInfo) => {
   const { name, color, id } = body;
-  return await db.transaction(async (tx) => {
+  const result = await db.transaction(async (tx) => {
     await db.update(users).set({ name, color }).where(eq(users.id, id));
     const result = await tx.select().from(users).where(eq(users.id, id));
     return result;
   });
+  return result[0];
 };
 
 export const assignRoleToUser = async (data: InferInsertModel<typeof userRole>) => {

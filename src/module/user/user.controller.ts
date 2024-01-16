@@ -10,6 +10,7 @@ import {
   saveUser,
 } from './user.service';
 import { SYSTEM_ROLES } from '../../config/permissions';
+import { getCouple } from '../couple/couple.service';
 
 export const createUserHandler = async (req: FastifyRequest<{ Body: CreateUserSchema }>, res: FastifyReply) => {
   const data = req.body;
@@ -37,9 +38,10 @@ export const updateUserHandler = async (req: FastifyRequest<{ Body: UpdateUserSc
 };
 
 export const getUserHandler = async (req: FastifyRequest) => {
-  const { user } = req;
-  const userInfo = await getUserById({ id: user.id });
-  return userInfo;
+  const { id } = req.user;
+  const user = await getUserById({ id });
+  const couple = await getCouple(id);
+  return { user, couple };
 };
 
 export const registerUserInfoHandler = async (req: FastifyRequest<{ Body: RegisterUserInfoSchema }>) => {

@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, timestamp, text, primaryKey, date, smallint } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, timestamp, text, primaryKey, date, smallint, index } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom().notNull(),
@@ -37,17 +37,26 @@ export const userRole = pgTable(
   },
 );
 
-export const couple = pgTable('couple', {
-  id: uuid('id').primaryKey().defaultRandom().notNull(),
-  code: varchar('code', { length: 8 }).unique().notNull(),
-  anniversary: date('anniversary').notNull(),
-  userId1: uuid('userId1')
-    .references(() => users.id)
-    .notNull(),
-  userId2: uuid('userId2').references(() => users.id),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
+export const couple = pgTable(
+  'couple',
+  {
+    id: uuid('id').primaryKey().defaultRandom().notNull(),
+    code: varchar('code', { length: 8 }).unique().notNull(),
+    anniversary: date('anniversary').notNull(),
+    userId1: uuid('userId1')
+      .references(() => users.id)
+      .notNull(),
+    userId2: uuid('userId2').references(() => users.id),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => {
+    return {
+      userId1Idx: index('user1_idx').on(table.userId1),
+      userId2Idx: index('user2_idx').on(table.userId2),
+    };
+  },
+);
 
 export const couplePage = pgTable('couplePage', {
   id: uuid('id').primaryKey().defaultRandom().notNull(),
