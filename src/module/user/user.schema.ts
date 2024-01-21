@@ -5,7 +5,8 @@ export const createUserBodySchema = z.object({
   email: z.string().email(),
   vendor: z.string(),
   name: z.string(),
-});
+}).describe("createUserBodySchema");
+
 export const updateUserBodySchema = z.object({
   name: z.string(),
   color: z.string(),
