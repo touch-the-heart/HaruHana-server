@@ -15,7 +15,7 @@ async function setGracefulShutdown(app: Awaited<ReturnType<typeof buildServer>>)
 
 async function main() {
   const app = await buildServer();
-  app.listen({ port: env.PORT, host: env.HOST });
+  app.listen({ port: env.PORT, host: env.HOST })
 
   if (env.NODE_ENV !== 'production') {
     await migrate(db, {

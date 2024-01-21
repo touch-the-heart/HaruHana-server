@@ -11,5 +11,7 @@ export const env = zennv({
     GOOGLE_CLIENT_ID: z.string().default(''),
     GOOGLE_SECRET_ID: z.string().default(''),
     TOKEN_SECRET: z.string(),
+    AWS_ACCESS_KEY: z.string(),
+    AWS_SECRET_KEY: z.string(),
   }),
 });
