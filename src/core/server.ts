@@ -8,10 +8,12 @@ import { roleRoutes } from '../module/role/role.route';
 import { registerGuard } from './plugins/guard';
 import { registerOnRequestHook } from './hook/onRequest';
 import { registerSwagger } from './plugins/swagger';
+import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
+import { coupleRoutes } from '../module/couple/couple.route';
 
 export const App = fastify({
   logger,
-});
+}).withTypeProvider<TypeBoxTypeProvider>();
 
 export async function buildServer() {
   await registerCorsProvider(App);
@@ -23,9 +25,10 @@ export async function buildServer() {
   App.get('/', async (_req, _res) => {
     return { hello: 'world' };
   });
-  App.register(userRoutes, { prefix: '/api/user' });
-  App.register(roleRoutes, { prefix: '/api/role' });
-  App.register(authRoute, { prefix: '/auth' });
+  App.register(userRoutes, { prefix: 'user' });
+  App.register(roleRoutes, { prefix: 'role' });
+  App.register(authRoute, { prefix: 'auth' });
+  App.register(coupleRoutes, { prefix: 'couple' });
 
   return App;
 }
