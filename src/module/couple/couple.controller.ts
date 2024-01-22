@@ -5,7 +5,7 @@ import { createCouplePage } from './couplePage.service';
 import { getCouplePage } from './couplePage.service';
 import { getSignedURL } from '../../provider/s3';
 import { uuid } from 'uuidv4';
-import { CoupleImageType } from './couple.schema';
+import { CoupleImageInputURLType } from './couple.schema';
 import mime from 'mime-types';
 
 export const getCouplePageHandler = async (req: FastifyRequest, res: FastifyReply) => {
@@ -33,7 +33,7 @@ export const getCouplePageHandler = async (req: FastifyRequest, res: FastifyRepl
   return couplePage;
 };
 
-export const getCoupleImageURL = async (req: FastifyRequest<{ Body: CoupleImageType }>) => {
+export const getCoupleImageURL = async (req: FastifyRequest<{ Body: CoupleImageInputURLType }>) => {
   const contentType = req.body.contentType;
   const imageKey = `${uuid()}.${mime.extension(contentType)}`;
   const key = `raw/${imageKey}`;

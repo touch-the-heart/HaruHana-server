@@ -8,6 +8,8 @@ export const logger = pino({
     'TOKEN_SECRET',
     'AWS_ACCESS_KEY',
     'AWS_SECRET_KEY',
+    'KAKAO_CLIENT_KEY',
+    'KAKAO_SECRET_KEY',
   ],
   level: 'debug',
   transport: {

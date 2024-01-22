@@ -9,10 +9,11 @@ type FindCouplePage = {
 };
 
 export const createCouplePage = async (data: CreateCouplePage) => {
-  return await db
+  const result = await db
     .insert(couplePage)
     .values({ ...data })
     .returning();
+  return result.at(0);
 };
 
 export const getCouplePage = async (data: FindCouplePage) => {

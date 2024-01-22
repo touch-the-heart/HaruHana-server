@@ -61,7 +61,7 @@ export async function kakaoHandler(
   // createUser
   const newUser = await createUser({
     email: userInfo.email,
-    vendor: 'google',
+    vendor: 'kakao',
     name: userInfo.name,
     color: faker.color.rgb(),
   });
