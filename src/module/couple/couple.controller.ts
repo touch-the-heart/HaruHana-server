@@ -6,7 +6,7 @@ import { getCouplePage } from './couplePage.service';
 import { getSignedURL } from '../../provider/s3';
 import { uuid } from 'uuidv4';
 import { CoupleImageType } from './couple.schema';
-import mime from 'mime';
+import mime from 'mime-types';
 
 export const getCouplePageHandler = async (req: FastifyRequest, res: FastifyReply) => {
   const { date } = req.params as { date: string };
@@ -35,7 +35,7 @@ export const getCouplePageHandler = async (req: FastifyRequest, res: FastifyRepl
 
 export const getCoupleImageURL = async (req: FastifyRequest<{ Body: CoupleImageType }>) => {
   const contentType = req.body.contentType;
-  const imageKey = `${uuid()}.${mime.getType(contentType)}`;
+  const imageKey = `${uuid()}.${mime.extension(contentType)}`;
   const key = `raw/${imageKey}`;
   const { url, fields } = await getSignedURL({ key });
   return { imageKey, url, fields };

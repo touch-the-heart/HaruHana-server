@@ -9,7 +9,7 @@ type CreateUserModel = InferInsertModel<typeof users>;
 type ReadUserModel = InferSelectModel<typeof users>;
 type EmailInfo = {
   email: string;
-  vendor: 'google';
+  vendor: 'google' | 'kakao';
 };
 type UpdateUserInfo = {
   id: string;
