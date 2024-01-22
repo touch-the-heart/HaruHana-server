@@ -58,6 +58,7 @@
     "@fastify/swagger-ui": "^1.9.3",
     "@fastify/type-provider-typebox": "^4.0.0",
     "@sinclair/typebox": "^0.32.12",
+    "@types/mime-types": "^2.1.4",
     "argon2": "^0.31.2",
     "axios": "^1.6.5",
     "drizzle-orm": "^0.29.3",
