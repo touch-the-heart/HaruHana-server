@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import zodToJsonSchema from 'zod-to-json-schema';
 
 export const createRoleBodySchema = z.object({
   name: z.string(),
@@ -8,5 +7,7 @@ export const createRoleBodySchema = z.object({
 
 export type CreateRoleSchema = z.infer<typeof createRoleBodySchema>;
 export const createRoleJsonSchema = {
-  body: zodToJsonSchema(createRoleBodySchema, 'createRoleBodySchema'),
+  body: { $ref: 'createRoleBodySchema#' },
+  headers: { $ref: 'auth#' },
+  tags: ['role'],
 };
