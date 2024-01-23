@@ -1,6 +1,6 @@
 import { InferInsertModel, eq, and, lte, gt } from 'drizzle-orm';
-import { coupleImage, couplePage } from '../../provider/db/schema';
-import { db } from '../../provider/db';
+import { coupleImage, couplePage } from '../../../provider/db/schema';
+import { db } from '../../../provider/db';
 
 type CreateCouplePage = InferInsertModel<typeof couplePage>;
 type FindCouplePage = {

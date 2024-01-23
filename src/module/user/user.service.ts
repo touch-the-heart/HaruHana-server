@@ -1,7 +1,7 @@
 import { InferInsertModel, eq, and, InferSelectModel } from 'drizzle-orm';
 import { db } from '../../provider/db';
 import { userRole, users } from '../../provider/db/schema';
-import { createCouple, getCoupleByCode, updateCouple } from '../couple/couple.service';
+import { createCouple, getCoupleByCode, updateCouple } from '../couple/service/couple.service';
 import { generateRandomString } from '../../util/random';
 
 type CreateUserModel = InferInsertModel<typeof users>;

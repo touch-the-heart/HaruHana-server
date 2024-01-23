@@ -5,7 +5,7 @@ import { assignRoleToUser, createUser, getUserByEmail } from '../user/user.servi
 import { getRoleByName } from '../role/role.service';
 import { SYSTEM_ROLES } from '../../config/permissions';
 import { createToken } from './auth.service';
-import { getCouple } from '../couple/couple.service';
+import { getCouple } from '../couple/service/couple.service';
 import { faker } from '@faker-js/faker';
 import { env } from '../../config/env';
 

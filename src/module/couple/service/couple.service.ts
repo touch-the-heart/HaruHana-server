@@ -1,6 +1,6 @@
 import { InferInsertModel, InferSelectModel, eq, or } from 'drizzle-orm';
-import { db } from '../../provider/db';
-import { couple } from '../../provider/db/schema';
+import { db } from '../../../provider/db';
+import { couple } from '../../../provider/db/schema';
 
 type SelectCouple = InferSelectModel<typeof couple>;
 type CreateCouple = InferInsertModel<typeof couple>;

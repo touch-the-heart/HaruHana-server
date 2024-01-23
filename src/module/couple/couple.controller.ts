@@ -1,14 +1,14 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { DateTime } from 'luxon';
-import { getCouple } from './couple.service';
-import { createCouplePage, getCouplePageById, getCouplePages } from './couplePage.service';
-import { getCouplePage } from './couplePage.service';
+import { getCouple } from './service/couple.service';
+import { createCouplePage, getCouplePageById, getCouplePages } from './service/couplePage.service';
+import { getCouplePage } from './service/couplePage.service';
 import { getSignedURL } from '../../provider/s3';
 import { uuid } from 'uuidv4';
 import { CoupleImageInputURLType } from './schema/couple.schema';
 import mime from 'mime-types';
 import { CoupleImageInputType } from './schema/coupleImage.schma';
-import { createCoupleImage } from './coupleImage.service';
+import { createCoupleImage } from './service/coupleImage.service';
 
 export const getCouplePageHandler = async (req: FastifyRequest, res: FastifyReply) => {
   const { date } = req.params as { date: string };

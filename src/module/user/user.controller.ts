@@ -10,7 +10,7 @@ import {
   saveUser,
 } from './user.service';
 import { SYSTEM_ROLES } from '../../config/permissions';
-import { getCouple } from '../couple/couple.service';
+import { getCouple } from '../couple/service/couple.service';
 
 export const createUserHandler = async (req: FastifyRequest<{ Body: CreateUserSchema }>, res: FastifyReply) => {
   const data = req.body;

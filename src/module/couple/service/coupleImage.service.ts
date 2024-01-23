@@ -1,5 +1,5 @@
-import { db } from '../../provider/db';
-import { coupleImage } from '../../provider/db/schema';
+import { db } from '../../../provider/db';
+import { coupleImage } from '../../../provider/db/schema';
 
 interface CoupleImageInput {
   src: string;
