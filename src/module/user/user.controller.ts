@@ -51,15 +51,21 @@ export const registerUserWithCoupleHandler = async (
   const { id } = req.user;
   const { code, nickname, color, anniversary } = req.body;
   const couple = await getCouple(id);
-
   if (couple) {
     return res.code(400).send({ result: 'false', message: '개인정보를 이미 등록하셨습니다.' });
   }
 
   if (!code) {
-    await runFirstRegister({ userId: id, nickname, color, anniversary: anniversary ?? '' });
-    return { result: 'true' };
+    const register = await runFirstRegister({ userId: id, nickname, color, anniversary: anniversary ?? '' });
+    if (!register.result) {
+      return res.code(400).send({ result: 'false', message: register.message });
+    }
+    return register;
   }
-  await runSecondRegister({ userId: id, nickname, color, code });
-  return { result: 'true' };
+
+  const register = await runSecondRegister({ userId: id, nickname, color, code });
+  if (!register.result) {
+    return res.code(400).send({ result: 'false', message: register.message });
+  }
+  return register.data;
 };

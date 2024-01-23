@@ -76,27 +76,30 @@ interface SecondRegister {
   userId: string;
 }
 
-export const runFirstRegister = async (data: FirstRegister) => {
-  const { nickname, color, anniversary, userId } = data;
+export const runFirstRegister = async (input: FirstRegister) => {
+  const { nickname, color, anniversary, userId } = input;
+
   if (!nickname || !color || !anniversary) {
-    throw new Error('400');
+    return { result: false, message: '데이터가 맞지 않습니다.', data: null };
   }
   await updateUserInfoById({ id: userId, nickname, color });
-  await createCouple({
+  const data = await createCouple({
     userId1: userId,
     anniversary: anniversary,
     code: generateRandomString(),
   });
+  return { result: true, data };
 };
 
 export const runSecondRegister = async (data: SecondRegister) => {
   const { nickname, color, code, userId } = data;
   const couple = await getCoupleByCode(code);
-  if (couple) {
-    return;
+  if (!couple) {
+    return { result: false, message: '커플이 존재하지 않습니다.', data: null };
   }
   await updateUserInfoById({ id: userId, nickname, color });
-  await updateCouple({
+  const result = await updateCouple({
     userId2: userId,
   });
+  return { result: true, data: result };
 };

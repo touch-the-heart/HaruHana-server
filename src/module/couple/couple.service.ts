@@ -30,7 +30,11 @@ export const createCouple = async (data: CreateCouple) => {
 };
 
 export const updateCouple = async (data: updateCouple) => {
-  await db.update(couple).set({
-    ...data,
-  });
+  const result = await db
+    .update(couple)
+    .set({
+      ...data,
+    })
+    .returning();
+  return result[0];
 };

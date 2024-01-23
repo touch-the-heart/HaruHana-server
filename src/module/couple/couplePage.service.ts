@@ -1,5 +1,5 @@
 import { InferInsertModel, eq, and, lte, gt } from 'drizzle-orm';
-import { couplePage } from '../../provider/db/schema';
+import { coupleImage, couplePage } from '../../provider/db/schema';
 import { db } from '../../provider/db';
 
 type CreateCouplePage = InferInsertModel<typeof couplePage>;
@@ -21,6 +21,11 @@ export const createCouplePage = async (data: CreateCouplePage) => {
   return result.at(0);
 };
 
+export const getCouplePageById = async (id: string) => {
+  const result = await db.select().from(couplePage).where(eq(couplePage.id, id));
+  return result.at(0);
+};
+
 export const getCouplePage = async (data: FindCouplePage) => {
   const { date, coupleId } = data;
   const result = await db
@@ -30,10 +35,28 @@ export const getCouplePage = async (data: FindCouplePage) => {
   return result.at(0);
 };
 
+type CouplePage = typeof couplePage.$inferSelect;
+type CoupleImage = typeof coupleImage.$inferSelect;
+
 export const getCouplePages = async (data: FindCouplePageRange) => {
   const { gtDate, lteDate, coupleId } = data;
-  return await db
+  const rows = await db
     .select()
     .from(couplePage)
-    .where(and(eq(couplePage.coupleId, coupleId), lte(couplePage.date, lteDate), gt(couplePage.date, gtDate)));
+    .where(and(eq(couplePage.coupleId, coupleId), lte(couplePage.date, lteDate), gt(couplePage.date, gtDate)))
+    .leftJoin(coupleImage, eq(couplePage.id, coupleImage.couplePageId));
+
+  const result = rows.reduce<Record<string, { couplePage: CouplePage; coupleImages: CoupleImage[] }>>((acc, row) => {
+    const couplePage = row.couplePage;
+    const coupleImage = row.coupleImage;
+
+    if (!acc[couplePage.date]) {
+      acc[couplePage.date] = { couplePage, coupleImages: [] };
+    }
+    if (coupleImage) {
+      acc[couplePage.date].coupleImages.push(coupleImage);
+    }
+    return acc;
+  }, {});
+  return result;
 };

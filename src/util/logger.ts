@@ -15,4 +15,5 @@ export const logger = pino({
   transport: {
     target: 'pino-pretty',
   },
+  name: 'haruhana',
 });
