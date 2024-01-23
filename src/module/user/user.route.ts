@@ -11,7 +11,7 @@ import {
   updateUserJsonSchema,
   userJsonSchema,
 } from './user.schema';
-import { createUserHandler, getUserHandler, registerUserInfoHandler, updateUserHandler } from './user.controller';
+import { createUserHandler, getUserHandler, registerUserWithCoupleHandler, updateUserHandler } from './user.controller';
 import { PERMISSIONS } from '../../config/permissions';
 import zodToJsonSchema from 'zod-to-json-schema';
 
@@ -34,7 +34,7 @@ export const userRoutes = async (app: FastifyInstance) => {
   app.post<{ Body: RegisterUserInfoSchema }>(
     '/info',
     { schema: registerUserInfoJsonSchema, preHandler: app.guard.scope(PERMISSIONS['user:*']) },
-    registerUserInfoHandler,
+    registerUserWithCoupleHandler,
   );
   app.get('/me', { schema: userJsonSchema, preHandler: app.guard.scope(PERMISSIONS['user:*']) }, getUserHandler);
 };

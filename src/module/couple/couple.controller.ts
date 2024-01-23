@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { DateTime } from 'luxon';
 import { getCouple } from './couple.service';
-import { createCouplePage } from './couplePage.service';
+import { createCouplePage, getCouplePages } from './couplePage.service';
 import { getCouplePage } from './couplePage.service';
 import { getSignedURL } from '../../provider/s3';
 import { uuid } from 'uuidv4';
@@ -31,6 +31,24 @@ export const getCouplePageHandler = async (req: FastifyRequest, res: FastifyRepl
     });
   }
   return couplePage;
+};
+
+export const getCoupleCalendarHandler = async (req: FastifyRequest, res: FastifyReply) => {
+  const { date } = req.params as { date: string };
+  const { id } = req.user;
+
+  const findDateTime = date
+    ? DateTime.fromFormat(date, 'yyyy-MM-dd').setZone('Asia/seoul')
+    : DateTime.now().setZone('Asia/seoul');
+
+  const lteDate = findDateTime.startOf('month').toFormat('yyyy-MM-dd');
+  const gtDate = findDateTime.endOf('month').toFormat('yyyy-MM-dd');
+
+  const couple = await getCouple(id);
+  if (!couple) {
+    return res.code(404).send({ message: 'couple is not found' });
+  }
+  return getCouplePages({ coupleId: couple.id, lteDate, gtDate });
 };
 
 export const getCoupleImageURL = async (req: FastifyRequest<{ Body: CoupleImageInputURLType }>) => {

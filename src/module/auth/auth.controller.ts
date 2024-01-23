@@ -29,6 +29,7 @@ export async function googleHandler(this: FastifyInstance, req: FastifyRequest, 
     email: userInfo.email,
     vendor: 'google',
     name: userInfo.name,
+    nickname: userInfo.name,
     color: faker.color.rgb(),
   });
   await assignRoleToUser({
@@ -63,6 +64,7 @@ export async function kakaoHandler(
     email: userInfo.email,
     vendor: 'kakao',
     name: userInfo.name,
+    nickname: userInfo.name,
     color: faker.color.rgb(),
   });
   await assignRoleToUser({
