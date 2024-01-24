@@ -46,8 +46,8 @@ export const registerSwagger = async (app: typeof App) => {
     $id: 'auth',
     type: 'object',
     properties: {
-      Authorization: { type: 'string' },
+      authorization: { type: 'string' },
     },
-    required: ['Authorization'],
+    required: ['authorization'],
   });
 };

@@ -1,6 +1,6 @@
 import { InferInsertModel, InferSelectModel, eq, or } from 'drizzle-orm';
-import { db } from '../../provider/db';
-import { couple } from '../../provider/db/schema';
+import { db } from '../../../provider/db';
+import { couple } from '../../../provider/db/schema';
 
 type SelectCouple = InferSelectModel<typeof couple>;
 type CreateCouple = InferInsertModel<typeof couple>;
@@ -30,7 +30,11 @@ export const createCouple = async (data: CreateCouple) => {
 };
 
 export const updateCouple = async (data: updateCouple) => {
-  await db.update(couple).set({
-    ...data,
-  });
+  const result = await db
+    .update(couple)
+    .set({
+      ...data,
+    })
+    .returning();
+  return result[0];
 };

@@ -5,6 +5,7 @@ export const users = pgTable('users', {
   email: varchar('email', { length: 256 }).notNull(),
   vendor: varchar('vendor', { length: 256 }).notNull(),
   name: varchar('name', { length: 256 }).notNull().default(''),
+  nickname: varchar('nickname', { length: 256 }).notNull().default(''),
   color: varchar('color', { length: 256 }).notNull().default(''),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),

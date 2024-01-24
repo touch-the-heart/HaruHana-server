@@ -5,7 +5,7 @@ import { assignRoleToUser, createUser, getUserByEmail } from '../user/user.servi
 import { getRoleByName } from '../role/role.service';
 import { SYSTEM_ROLES } from '../../config/permissions';
 import { createToken } from './auth.service';
-import { getCouple } from '../couple/couple.service';
+import { getCouple } from '../couple/service/couple.service';
 import { faker } from '@faker-js/faker';
 import { env } from '../../config/env';
 
@@ -29,6 +29,7 @@ export async function googleHandler(this: FastifyInstance, req: FastifyRequest, 
     email: userInfo.email,
     vendor: 'google',
     name: userInfo.name,
+    nickname: userInfo.name,
     color: faker.color.rgb(),
   });
   await assignRoleToUser({
@@ -63,6 +64,7 @@ export async function kakaoHandler(
     email: userInfo.email,
     vendor: 'kakao',
     name: userInfo.name,
+    nickname: userInfo.name,
     color: faker.color.rgb(),
   });
   await assignRoleToUser({

@@ -15,6 +15,13 @@
       "when": 1705314821935,
       "tag": "0001_milky_storm",
       "breakpoints": false
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1705973885073,
+      "tag": "0002_gray_spectrum",
+      "breakpoints": false
     }
   ]
 }

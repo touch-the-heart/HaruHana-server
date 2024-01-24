@@ -10,7 +10,7 @@ import {
   saveUser,
 } from './user.service';
 import { SYSTEM_ROLES } from '../../config/permissions';
-import { getCouple } from '../couple/couple.service';
+import { getCouple } from '../couple/service/couple.service';
 
 export const createUserHandler = async (req: FastifyRequest<{ Body: CreateUserSchema }>, res: FastifyReply) => {
   const data = req.body;
@@ -32,9 +32,9 @@ export const createUserHandler = async (req: FastifyRequest<{ Body: CreateUserSc
   }
 };
 export const updateUserHandler = async (req: FastifyRequest<{ Body: UpdateUserSchema }>) => {
-  const { name, color } = req.body;
+  const { nickname, color } = req.body;
   const { id } = req.user;
-  return saveUser({ id, name, color });
+  return saveUser({ id, nickname, color });
 };
 
 export const getUserHandler = async (req: FastifyRequest) => {
@@ -44,12 +44,28 @@ export const getUserHandler = async (req: FastifyRequest) => {
   return { user, couple };
 };
 
-export const registerUserInfoHandler = async (req: FastifyRequest<{ Body: RegisterUserInfoSchema }>) => {
+export const registerUserWithCoupleHandler = async (
+  req: FastifyRequest<{ Body: RegisterUserInfoSchema }>,
+  res: FastifyReply,
+) => {
   const { id } = req.user;
-  const { code, name, color, anniversary } = req.body;
-  if (!code) {
-    await runFirstRegister({ userId: id, name, color, anniversary: anniversary ?? '' });
-    return;
+  const { code, nickname, color, anniversary } = req.body;
+  const couple = await getCouple(id);
+  if (couple) {
+    return res.code(400).send({ result: 'false', message: '개인정보를 이미 등록하셨습니다.' });
   }
-  await runSecondRegister({ userId: id, name, color, code });
+
+  if (!code) {
+    const register = await runFirstRegister({ userId: id, nickname, color, anniversary: anniversary ?? '' });
+    if (!register.result) {
+      return res.code(400).send({ result: 'false', message: register.message });
+    }
+    return register;
+  }
+
+  const register = await runSecondRegister({ userId: id, nickname, color, code });
+  if (!register.result) {
+    return res.code(400).send({ result: 'false', message: register.message });
+  }
+  return register.data;
 };
