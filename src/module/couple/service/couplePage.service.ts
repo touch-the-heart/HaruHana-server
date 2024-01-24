@@ -28,11 +28,23 @@ export const getCouplePageById = async (id: string) => {
 
 export const getCouplePage = async (data: FindCouplePage) => {
   const { date, coupleId } = data;
-  const result = await db
+  const rows = await db
     .select()
     .from(couplePage)
-    .where(and(eq(couplePage.date, date), eq(couplePage.coupleId, coupleId)));
-  return result.at(0);
+    .where(and(eq(couplePage.date, date), eq(couplePage.coupleId, coupleId)))
+    .leftJoin(coupleImage, eq(couplePage.id, coupleImage.couplePageId));
+
+  const result = rows.reduce<Record<string, { couplePage: CouplePage; coupleImages: CoupleImage[] }>>((acc, row) => {
+    const { couplePage, coupleImage } = row;
+    if (!acc[couplePage.coupleId]) {
+      acc[couplePage.id] = { couplePage, coupleImages: [] };
+    }
+    if (coupleImage) {
+      acc[couplePage.id].coupleImages.push(coupleImage);
+    }
+    return acc;
+  }, {});
+  return Object.values(result);
 };
 
 type CouplePage = typeof couplePage.$inferSelect;
@@ -44,7 +56,8 @@ export const getCouplePages = async (data: FindCouplePageRange) => {
     .select()
     .from(couplePage)
     .where(and(eq(couplePage.coupleId, coupleId), lte(couplePage.date, lteDate), gt(couplePage.date, gtDate)))
-    .leftJoin(coupleImage, eq(couplePage.id, coupleImage.couplePageId));
+    .leftJoin(coupleImage, eq(couplePage.id, coupleImage.couplePageId))
+    .orderBy(couplePage.date);
 
   const result = rows.reduce<Record<string, { couplePage: CouplePage; coupleImages: CoupleImage[] }>>((acc, row) => {
     const couplePage = row.couplePage;

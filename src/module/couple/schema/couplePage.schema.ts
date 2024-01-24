@@ -13,10 +13,27 @@ const CouplePage = Type.Object({
   createdAt: Type.String(),
   updatedAt: Type.String(),
 });
+
+const CoupleImage = Type.Object({
+  id: Type.String(),
+  couplePageId: Type.String(),
+  src: Type.String(),
+  userId: Type.String(),
+  createdAt: Type.String(),
+  updatedAt: Type.String(),
+});
+
+const CouplePageResponse = Type.Array(
+  Type.Object({
+    couplePage: CouplePage,
+    coupleImages: Type.Array(CoupleImage),
+  }),
+);
+
 export type CouplePageType = Static<typeof CouplePage>;
 export const CouplePageSchema = {
   response: {
-    200: CouplePage,
+    200: CouplePageResponse,
   },
   tags: ['couple'],
 };

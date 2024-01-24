@@ -25,6 +25,7 @@ export const getCouplePageHandler = async (req: FastifyRequest, res: FastifyRepl
   }
 
   const couplePage = await getCouplePage({ coupleId: couple.id, date: findDate });
+  console.log(couplePage);
   if (!couplePage) {
     return createCouplePage({
       date: findDate,
